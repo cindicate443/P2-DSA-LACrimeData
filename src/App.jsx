@@ -4,6 +4,22 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
+  // Fetch backend/C++ output
+  // For reference, region is the value, setRegion is the function to update the value, San Ferando is the defaul
+  const [region, setRegion] = useState("San Fernando Valley");
+  const [cppOutput, setCppOutput] = useState("");
+
+  // List of search types for buttons
+  const searchTypes = ["DFS", "BFS", "DISPLAY"];
+
+  const search = (type) => {
+    // Make HTTP request to backend
+    fetch(`http://localhost:3001/run-cpp?type=${type}&region=${region}`)
+      .then(res => res.text()) // Plain text response
+      .then(console.log)
+      .then(setCppOutput)   // Directly set state
+      .catch(err => setCppOutput("Error: " + err));
+  }
 
   return (
     <>
