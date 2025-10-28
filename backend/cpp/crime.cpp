@@ -5,11 +5,11 @@
 using namespace std;
 int main(int argc, char* argv[]) {
     // Get arguments from command line
-    std::string type = argv[1];   // DFS, BFS, DISPLAY
-    std::string region = argv[2]; // region name
+    //std::string type = argv[1];   // DFS, BFS, DISPLAY
+    //std::string region = argv[2]; // region name
 
     // Temporary test output
-    std::cout << "Running " << type << " for " << region << std::endl;
+    //::cout << "Running " << type << " for " << region << std::endl;
 
     ifstream input("crimeData.json");
     if (!input) {
