@@ -8,6 +8,11 @@
 
 
 class tree {
+  struct treeNode{
+
+    treeNode(): left(nullptr), right(nullptr) {}
+  }
+  public:
 
 };
 
