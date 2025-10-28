@@ -5,6 +5,8 @@ import dotenv from 'dotenv'
 
 import router from './routes.js'
 
+import { runCpp, retrieveData } from './controls.js'
+
 dotenv.config()
 
 const app = express();
@@ -15,6 +17,8 @@ app.use(cors()); //we'll write the location of front end here (its port)
 app.get('/test', (req, res) => {
   res.send('Backend is working!');
 });
+app.get('/retrieve-data', retrieveData);
+app.get('/run-cpp', runCpp);
 
 app.use('/', router) //just using this for now so when you open localhost:3001 itll try and create the data file
 
