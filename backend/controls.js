@@ -9,78 +9,88 @@ export async function retrieveData(_, res){ //doesnt need req only need res
 
 
         const get20 = 20 // how many requests we make at a time
-        fs.writeFileSync('crimeData.json', '') //create file and if file already created empty it
-        for(let i =1; i < 2010; i+=get20){
-            /*
+        let pageNumber = 1
+        //fs.writeFileSync('crimeData.json', '') //create file and if file already created empty it
+        for(let i = 0; i < 10; i++){
+            let chunk = []
+            for(let k = 1; k < 200; k+=get20){/*
             each page of the data set has 50 values so we will go 2010pages * 50rows per page
              just to get a little more
              */
 
-            let requests = [] // we will house all fetch requests in this array
+                let requests = [] // we will house all fetch requests in this array
 
-            for(let j = i; j < i + get20 && j < 2010; j++){
-                requests.push(fetch(process.env.DATA_API +
-                    "?pageNumber=" + j +
-                    "&pageSize=50" +
-                    "&orderingSpecifier=discard" +
-                    "&app_token=" + process.env.SECRET_TOKEN))
-            }
-            /*
-            page number which will be indexed so we go through first 2050 pages
-            pageSize which is a bit misleading as this just ask how many rows per page so we will take 50
-            ordering specifier which the documentation said would make things run faster
-            and an app token which the documentation asks us to have so we can have valid api calls
-             */
+                for (let j = k; j < k + get20 && j < 200; j++) {
+                    requests.push(fetch(process.env.DATA_API +
+                        "?pageNumber=" + pageNumber +
+                        "&pageSize=50" +
+                        "&orderingSpecifier=discard" +
+                        "&app_token=" + process.env.SECRET_TOKEN))
+                    pageNumber++;
+                }
+                /*
+                page number which will be indexed so we go through first 2010 pages
+                pageSize which is a bit misleading as this just ask how many rows per page so we will take 50
+                ordering specifier which the documentation said would make things run faster
+                and an app token which the documentation asks us to have so we can have valid api calls
+                 */
 
-            const response = await Promise.all(requests)
-            /*
-            we will do 20 requests at a time and await for the 20 to finish
-            This i faster than doing one requests at a time because instead of waiting one by one
-            we only wait for 20 than do next 20
-            we have it set to 20 for now so we dont get blocked by the api
-            i personally am to afraid to go higher than that for now
-             */
+                const response = await Promise.all(requests)
+                /*
+                we will do 20 requests at a time and await for the 20 to finish
+                This i faster than doing one requests at a time because instead of waiting one by one
+                we only wait for 20 than do next 20
+                we have it set to 20 for now so we dont get blocked by the api
+                i personally am to afraid to go higher than that for now
+                 */
 
-            const jsonArr = await Promise.all(response.map(r => r.json()))
-            //turn all the response into json so we can put them into file
-
-            /*
-
-            DATA_API and SECRET_TOKEN are hidden in the .env file.
-            secret token is the token it specifically gave me. we'll find out later if we all share one or use separates - c
+                const jsonArr = await Promise.all(response.map(r => r.json()))
 
 
-            take in crime code, area code and area name?
-             */
+                //turn all the response into json so we can put them into file
 
-            const filter = jsonArr.flatMap(item =>
-                Array.isArray(item) ?
-                item.map(d => ({
-                area: d.area,
-                crm_cd: d.crm_cd,
-                area_name: d.area_name
-            }))
-            : [])
-            /*
-            this will filter the data so that we only have certain values. as of now its just area thats kept
-            flatMap makes it all one contiguous array
-            Array.isArray(item) ? is actually a conditional statement checking if the current item is a valid response
-            so an array or if it was returned some bad value.
-            the conditional shows that itll run the filter on the data if its a array and if it isnt itll : [] return an
-            empty array so its ignored
-             */
+                /*
+
+                DATA_API and SECRET_TOKEN are hidden in the .env file.
+                secret token is the token it specifically gave me. we'll find out later if we all share one or use separates - c
 
 
-            const chunk = JSON.stringify(filter)
-            /*
-            this chunk we just aquired after all that will now be inputted into the file so we
-            dont write a bajillion lines at once
-             */
+                take in crime code, area code and area name?
+                 */
 
-            //write the chunk to file
-            fs.appendFileSync('crimeData.json', chunk)
-            console.log("input page: ", i)
-            //just for us to see what page were on
+                const filter = jsonArr.flatMap(item =>
+                    Array.isArray(item) ?
+                        item.map(d => ({
+                            area: d.area,
+                            crm_cd: d.crm_cd,
+                            area_name: d.area_name
+                        }))
+                        : [])
+
+                /*
+                this will filter the data so that we only have certain values. as of now its just area thats kept
+                flatMap makes it all one contiguous array
+                Array.isArray(item) ? is actually a conditional statement checking if the current item is a valid response
+                so an array or if it was returned some bad value.
+                the conditional shows that itll run the filter on the data if its a array and if it isnt itll : [] return an
+                empty array so its ignored
+                 */
+
+
+                //const chunk = JSON.stringify(filter)
+                chunk.push(JSON.stringify(filter))
+                /*
+                this chunk we just aquired after all that will now be inputted into the file so we
+                dont write a bajillion lines at once
+                 */
+
+                //write the chunk to file
+
+                //just for us to see what page were on
+                //
+                }
+            fs.writeFileSync(`crimeData_${i}.json`, JSON.stringify(chunk))
+            console.log("input crimeData: ", i)
         }
 
         console.log("saved crimeData.json");

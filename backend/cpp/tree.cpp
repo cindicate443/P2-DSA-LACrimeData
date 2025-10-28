@@ -3,4 +3,5 @@
 //
 
 #include "tree.h"
-//nothing here yet
+
+int value;

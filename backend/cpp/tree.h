@@ -6,13 +6,15 @@
 #define TREE_H
 
 
-
+template<typename T>
 class tree {
   struct treeNode{
 
     treeNode(): left(nullptr), right(nullptr) {}
-  }
+  };
   public:
+
+    tree() : root(nullptr) {}
 
 };
 
