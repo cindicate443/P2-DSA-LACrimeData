@@ -12,20 +12,6 @@ const __dirname = path.dirname(__filename);
 
 export async function retrieveData(_, res){ //doesnt need req only need res
     try{
-            //this is the response from the api. it takes in four queries
-            //page number which will be indexed so we go through first 2050 pages
-            //pageSize which is a bit misleading as this just ask how many rows per page so we will take 50
-            //ordering specifier which the documentation said would make things run faster but it doesnt seem to be helping our case as of now
-            //and an app token which the documentation asks us to have so we can have valid api calls
-
-            //DATA_API and SECRET_TOKEN are hidden in the .env file.
-            //secret token is the token it specifically gave me. we'll find out later if we all share one or use separates - c
-
-            //this will turn the data from the response into json
-
-            //this will filter the data so that we only have certain values. as of now its just area thats kept
-
-            //this puts all the data into one variable
 
         const get20 = 20 // how many requests we make at a time
         let pageNumber = 1
