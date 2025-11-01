@@ -10,7 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
-export async function retrieveData(_, res){
+export async function retrieveData(req, res){
     try{
 
         const get20 = 20 // how many requests we make at a time
@@ -32,7 +32,7 @@ export async function retrieveData(_, res){
                 }
 
                //DATA_API and SECRET_TOKEN are hidden in the .env file.
-
+                const response = await Promise.all(requests)
                 /*
                 we will do 20 requests at a time and await for the 20 to finish
                 This is faster than doing one requests at a time because instead of waiting one by one
@@ -52,10 +52,8 @@ export async function retrieveData(_, res){
                 const filter = jsonArr.flatMap(item =>
                     Array.isArray(item) ?
                         item.map(d => ({
-                            area: d.area,
-                            crm_cd: d.crm_cd,
-                            area_name: d.area_name,
-                            dr_no : d.dr_no
+                            [req.query.xAxis]: d[req.query.xAxis],
+                            dr_no: d.dr_no
                         }))
                         : [])
 
@@ -108,7 +106,7 @@ export function runCpp(req, res){
 
 
 //just for testing retrieveData. run by going to localhost:PORT/test. same as other just only does one .json file with less data
-export async function retrieveDataTest(_, res){ //doesnt need req only need res
+export async function retrieveDataTest(req, res){ //doesnt need req only need res
     try{
 
         const get20 = 20 // how many requests we make at a time
@@ -162,10 +160,8 @@ export async function retrieveDataTest(_, res){ //doesnt need req only need res
                 const filter = jsonArr.flatMap(item =>
                     Array.isArray(item) ?
                         item.map(d => ({
-                            area: d.area,
-                            crm_cd: d.crm_cd,
-                            area_name: d.area_name,
-                            dr_no : d.dr_no
+                            [req.query.xAxis]: d[req.query.xAxis],
+                            dr_no: dr_no
                         }))
                         : [])
 

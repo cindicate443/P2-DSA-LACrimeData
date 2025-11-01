@@ -61,8 +61,15 @@
 
             json data = json::parse(ifs);
             for (int i = 0; i < data.size(); i++) {
-                string dr_num = data[i]["dr_no"];
-                string val = data[i]["area_name"];
+                auto itr = data.begin();
+                string dr_num;
+                string val;
+                while (itr != data.end()) {
+                    if (itr.key() == "dr_no") {itr++; dr_num = data[i][itr.key()]; continue;}
+                    else val = data[i][itr.key()];
+                    itr++;
+                }
+
                 insertNode(dr_num, val);
             }
             ifs.close();
@@ -127,6 +134,10 @@
             }
         }
 
+
+    }
+
+    void CrimeTree::dfsAlg() {
 
     }
 
