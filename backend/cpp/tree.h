@@ -37,6 +37,7 @@ public:
     Node* insertInSubtree(Node* node, Node* root);
 
     void bfsAlg();
+    void dfsAlg();
 
     void inorderTraversal(Node* root);
 

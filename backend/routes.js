@@ -6,7 +6,7 @@ const router = express.Router()
 //maybe a post request for when display is clicked idk
 
 
-router.get('/', retrieveData)
+router.get('/api/test', retrieveData)
 router.get('/test', retrieveDataTest)
 
 export default router

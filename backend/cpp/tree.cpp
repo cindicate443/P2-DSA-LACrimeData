@@ -2,7 +2,6 @@
 // Created by Christopher Silva on 10/26/25.
 //
 #include "tree.h"
-namespace fs = std::filesystem;
 
 
 /*
@@ -50,7 +49,6 @@ namespace fs = std::filesystem;
     }
 
     void CrimeTree::grabJsonData() {
-        fs::path cppFolder = fs::path(__FILE__).parent_path();
         for (int i = 0; i < 10; i++) {
             ostringstream oss;
 
@@ -63,8 +61,15 @@ namespace fs = std::filesystem;
 
             json data = json::parse(ifs);
             for (int i = 0; i < data.size(); i++) {
-                string dr_num = data[i]["dr_no"];
-                string val = data[i]["area_name"];
+                auto itr = data.begin();
+                string dr_num;
+                string val;
+                while (itr != data.end()) {
+                    if (itr.key() == "dr_no") {itr++; dr_num = data[i][itr.key()]; continue;}
+                    else val = data[i][itr.key()];
+                    itr++;
+                }
+
                 insertNode(dr_num, val);
             }
             ifs.close();
@@ -129,6 +134,10 @@ namespace fs = std::filesystem;
             }
         }
 
+
+    }
+
+    void CrimeTree::dfsAlg() {
 
     }
 
