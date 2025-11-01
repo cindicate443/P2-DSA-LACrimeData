@@ -2,7 +2,6 @@
 // Created by Christopher Silva on 10/26/25.
 //
 #include "tree.h"
-namespace fs = std::filesystem;
 
 
 /*
@@ -50,7 +49,6 @@ namespace fs = std::filesystem;
     }
 
     void CrimeTree::grabJsonData() {
-        fs::path cppFolder = fs::path(__FILE__).parent_path();
         for (int i = 0; i < 10; i++) {
             ostringstream oss;
 
