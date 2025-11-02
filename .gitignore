@@ -31,3 +31,11 @@ dist-ssr
 crimeData_*.json
 crimeData.json
 
+
+#exe
+tree
+crime
+P2-DSA-LACrimeData
+tree.exe
+crime.exe
+P2-DSA-LACrimeData.exe

@@ -49,10 +49,12 @@
     }
 
     void CrimeTree::grabJsonData() {
+        fs::path exePath = fs::current_path();
         for (int i = 0; i < 10; i++) {
             ostringstream oss;
-
             oss << "../../crimeData_" << i << ".json";
+            fs::path dataDirectory = exePath / oss.str();
+            //keep working from here
             ifstream ifs(oss.str());
             if (!ifs.is_open()) {
                 cerr << "couldnt open " + oss.str() << endl;
@@ -61,11 +63,11 @@
 
             json data = json::parse(ifs);
             for (int i = 0; i < data.size(); i++) {
-                auto itr = data.begin();
+                auto itr = data[i].begin();
                 string dr_num;
                 string val;
-                while (itr != data.end()) {
-                    if (itr.key() == "dr_no") {itr++; dr_num = data[i][itr.key()]; continue;}
+                while (itr != data[i].end()) {
+                    if (itr.key() == "dr_no") {dr_num = data[i][itr.key()]; itr++; continue;}
                     else val = data[i][itr.key()];
                     itr++;
                 }
@@ -146,6 +148,9 @@
         if (root == nullptr) return;
 
         inorderTraversal(root->left);
+        //there is one dr_no that is particularly small. its 0817.
+        //everything should still work so i hope that doesnt ruin stuff
+
         cout << root->dr_num << " " << root->val << endl;
         inorderTraversal(root->right);
 
@@ -154,7 +159,6 @@
     void CrimeTree::printAllSubtrees() {
         auto itr = roots.begin();
         while (itr != roots.end()) {
-            cout << itr->second->count << endl;
             inorderTraversal(itr->second);
             itr++;
         }

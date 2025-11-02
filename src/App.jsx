@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import "@fontsource/ibm-plex-sans";
+
 
 function App() {
   // Fetch backend/C++ output
@@ -62,7 +62,7 @@ function App() {
   return (
     <>
       <nav className='nav-cont'>
-        <h1 style={{ color: 'orange' }}>Crime Data Explorer</h1>
+        <h1 id = "title" >Crime Data Explorer</h1>
       </nav>
 
       <div className='main'>

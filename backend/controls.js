@@ -1,4 +1,5 @@
-import { execFile } from 'child_process'
+/* eslint-env node */
+import { execFile, exec } from 'child_process'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import fs from 'fs'
@@ -12,7 +13,7 @@ const __dirname = path.dirname(__filename);
 
 export async function retrieveData(req, res){
     try{
-
+        //http://localhost:3001/api/test?xAxis=(wtv u want)
         const get20 = 20 // how many requests we make at a time
         let pageNumber = 1
         for(let i = 0; i < 10; i++){
@@ -82,26 +83,34 @@ export async function retrieveData(req, res){
 }
 
 export function runCpp(req, res){
-    const type = String(req.query.type || "DISPLAY").slice(0, 20); //Read type, default display if not
-    const region = String(req.query.region || "UNKNOWN").slice(0, 20); //Read region, default uknown all if not
-    const binPath = path.join(__dirname, "bin", process.platform === 'win32' ? 'crime.exe' : 'crime'); //Executable path
-    //Execute C++ binary with args
-    if (!fs.existsSync(binPath)) {
-        return res.status(500).send("C++ binary not found.");
-    }
+    try{
+        const filesToCompile = "tree.cpp crime.cpp"
+        const exeName = process.platorm == "win32" ? "P2-DSA_LACrimeData.exe" : "P2-DSA-LACrimeData"
 
-    const args = [type, region];
-    // safety: set timeout and maxBuffer to avoid hangs / excessive memory
-    const execOptions = { timeout: 10000, maxBuffer: 10 * 1024 * 1024 };
-    execFile(binPath, args, execOptions, (error, stdout, stderr) => {
-        if (error) {
-            console.error("Error executing C++ binary:", error, stderr);
-            if (error.killed) return res.status(504).send("C++ process timed out.");
-            return res.status(500).send("Error executing C++ binary.");
+
+        const type = String(req.query.type || "DISPLAY").slice(0, 20); //Read type, default display if not
+        const region = String(req.query.region || "UNKNOWN").slice(0, 20); //Read region, default uknown all if not
+        const binPath = path.join(__dirname, "cpp", "build", process.platform === 'win32' ? 'P2-DSA-LACrimeData.exe' : 'P2-DSA-LACrimeData'); //Executable path
+        //Execute C++ binary with args
+        if (!fs.existsSync(binPath)) {
+            return res.status(500).send("C++ binary not found.");
         }
-        // Send stdout as response
-        return res.status(200).send(stdout || "No output from C++ program.");
-    });
+
+        const args = [type, region];
+        // safety: set timeout and maxBuffer to avoid hangs / excessive memory
+        const execOptions = {timeout: 10000, maxBuffer: 10 * 1024 * 1024};
+        execFile(binPath, args, execOptions, (error, stdout, stderr) => {
+            if (error) {
+                console.error("Error executing C++ binary:", error, stderr);
+                if (error.killed) return res.status(504).send("C++ process timed out.");
+                return res.status(500).send("Error executing C++ binary.");
+            }
+            // Send stdout as response
+            return res.status(200).send(stdout || "No output from C++ program.");
+        });
+    } catch(error){
+        console.error("Couldnt run the program :( ", error)
+    }
 }
 
 
@@ -114,11 +123,11 @@ export async function retrieveDataTest(req, res){ //doesnt need req only need re
         for(let i = 0; i < 1; i++){
             console.log(`trying page ${i}`)
             let chunk = []
-            for(let k = 1; k < 201; k+=get20){
+            for(let k = 1; k < 41; k+=get20){
 
                 let requests = [] // we will house all fetch requests in this array
 
-                for (let j = k; j < k + get20 && j < 201; j++) {
+                for (let j = k; j < k + get20 && j < 41; j++) {
                     requests.push(fetch(process.env.DATA_API +
                         "?pageNumber=" + pageNumber +
                         "&pageSize=20" +
@@ -161,7 +170,7 @@ export async function retrieveDataTest(req, res){ //doesnt need req only need re
                     Array.isArray(item) ?
                         item.map(d => ({
                             [req.query.xAxis]: d[req.query.xAxis],
-                            dr_no: dr_no
+                            dr_no: d.dr_no
                         }))
                         : [])
 

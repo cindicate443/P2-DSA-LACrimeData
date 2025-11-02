@@ -1,11 +1,20 @@
+
 * {
   margin: 0;
 }
 
 .nav-cont {
-  background: linear-gradient(to bottom, blue 80%, orange 10%);
+  background: linear-gradient(to bottom, #0021A5 80%, #FA4616 10%);
   text-align: center;
   height: 50px;
+}
+
+#title {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 24px;
+  font-style: italic;
+  padding-top: 5px;
+  color: #FA4616;
 }
 
 .main {

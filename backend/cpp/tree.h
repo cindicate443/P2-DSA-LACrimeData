@@ -8,6 +8,7 @@
 //https://gist.github.com/Einstrasse/ac0fe7d7450621a39364ed3b05cacd11 use this and put it into that directory for bits/stdc++.h
 #include "json.hpp" // include nlohmann json library
 #include <filesystem>
+using fs = std::filesystem;
 using json = nlohmann::json; //Just for json abbreviation
 using namespace std;
 
