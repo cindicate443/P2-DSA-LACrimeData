@@ -13,12 +13,16 @@ function App() {
   const [data, setData] = useState([]);
   const [cppOutput, setCppOutput] = useState("");
 
+  const [message, setMessage] = useState("");
+  const [type, setType] = useState("area");
+  const [region, setRegion] = useState("N Hollywood");
+
   const APP_TOKEN = "JZStIfxvIBLxyqzrOs41hWlyx" // api token from making an account with City of Los Angeles
   const api = `https://data.lacity.org/api/v3/views/2nrs-mtv8/query.json/`; // api using SODA3
 
   // List of search types for buttons
   //const searchTypes = ["DFS", "BFS", "DISPLAY"];
-  const [searchType, setSearchType] = useState(""); // using useState instead or array bc its easier to keep track when clicked (i.e onClick event)
+  const [searchType, setSearchType] = useState("hello"); // using useState instead or array bc its easier to keep track when clicked (i.e onClick event)
 
   const search = (type) => {
     // Make HTTP request to backend
@@ -53,6 +57,17 @@ function App() {
     })
   }
 
+  const handleFetch = async (e) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/test`);
+      setMessage(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+
   useEffect(() => {
     fetchAreaNames();
     fetchLAT();
@@ -66,6 +81,10 @@ function App() {
       </nav>
 
       <div className='main'>
+
+        <button onClick={() => handleFetch()}>call node api</button>
+        <p>message: {message}</p>
+
         <label> Select region
           <select>
             {areas.map((item, key) => {
