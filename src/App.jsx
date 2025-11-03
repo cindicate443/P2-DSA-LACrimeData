@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './App.css'
-import "@fontsource/ibm-plex-sans";
+import BarGraph from './BarGraph/BarGraph';
+//import "@fontsource/ibm-plex-sans";
 
 
 function App() {
@@ -108,8 +109,10 @@ function App() {
 
 
         <div className='map'>
-          
+          <BarGraph x_axis_label={"BFS"} y_axis_label={"Crime Amount"} />
+          <BarGraph x_axis_label={"DFS"} y_axis_label={"Crime Amount"} />
         </div>
+
 
         <div className='controls'>
         <label> Longitude
