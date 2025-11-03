@@ -17,14 +17,14 @@ export async function retrieveData(req, res){
         //http://localhost:3001/api/test?xAxis=(wtv u want)
         const get20 = 20 // how many requests we make at a time
         let pageNumber = 1
-        for(let i = 0; i < 10; i++){
+        for(let i = 0; i < 1; i++){
             console.log(`trying page ${i}`)
             let chunk = []
-            for(let k = 1; k < 201; k+=get20){
+            for(let k = 1; k < 21; k+=get20){
 
                 let requests = [] // we will house all fetch requests in this array
 
-                for (let j = k; j < k + get20 && j < 201; j++) {
+                for (let j = k; j < k + get20 && j < 21; j++) {
                     requests.push(fetch(process.env.DATA_API +
                         "?pageNumber=" + pageNumber +
                         "&pageSize=50" +
@@ -51,16 +51,20 @@ export async function retrieveData(req, res){
 
 
 
-                const filter = jsonArr.flatMap(item =>
-                    Array.isArray(item) ?
-                        item.map(d => ({
-                            [req.query.xAxis]: d[req.query.xAxis],
-                            dr_no: d.dr_no
-                        }))
-                        : [])
+                const filter = jsonArr.flatMap((item) => {
+                    if (Array.isArray(item)) {
+                        return item.map((d) => {
+                            cppReqSet.add(d[req.query.xAxis]);
+                            return {
+                                [req.query.xAxis]: d[req.query.xAxis],
+                                dr_no: d.dr_no
+                            };
+                        });
+                    } else {
+                        return [];
+                    }
+                });
 
-                cppReqSet.add((req.query.xAxis).json())
-                console.log(cppReqSet)
 
                 /*
                 this will filter the data so that we only have certain values. that are requested
@@ -78,8 +82,9 @@ export async function retrieveData(req, res){
         }
 
 
+
         console.log("saved dataset.json");
-        res.status(200).json(cppReqSet)
+        res.status(200).json({msg: [...cppReqSet]})
     } catch(error){
         console.error("Couldnt get crime data", error)
         res.status(400).json({msg: "failed to retrieve data"})
