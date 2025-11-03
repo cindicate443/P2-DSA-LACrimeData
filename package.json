@@ -12,9 +12,11 @@
   "dependencies": {
     "@fontsource/ibm-plex-sans": "^5.2.8",
     "axios": "^1.13.1",
+    "chart.js": "^4.5.1",
     "dotenv": "^17.2.3",
     "node-fetch": "^3.3.2",
     "react": "^19.1.1",
+    "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
