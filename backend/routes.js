@@ -1,5 +1,5 @@
 import express from 'express'
-import {retrieveData, retrieveDataTest, retrieveXAxisData} from './controls.js'
+import {retrieveData, retrieveDataTest} from './controls.js'
 
 const router = express.Router()
 //express router so we can organize our controls here. In the future there will probably be a get request for when bfs and dfs are clicked
@@ -8,6 +8,5 @@ const router = express.Router()
 
 router.get('/api/test', retrieveData)
 router.get('/test', retrieveDataTest)
-router.get('/retrieve-xaxis-data', retrieveXAxisData)
 
 export default router
