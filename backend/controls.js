@@ -15,9 +15,8 @@ const __dirname = path.dirname(__filename);
 
 export async function retrieveData(req, res){
     try{
-        const cppReqSet = new Set()
         //http://localhost:3001/api/test?xAxis=(wtv u want)
-        const xAxis = req.query.Xaxis || "AREA"; //default to area_name if not provided
+        // const xAxis = req.query.Xaxis || "AREA"; //default to area_name if not provided
         const get20 = 20 // how many requests we make at a time
         let pageNumber = 1
         for(let i = 0; i < 10; i++){
@@ -57,7 +56,6 @@ export async function retrieveData(req, res){
                 const filter = jsonArr.flatMap((item) => {
                     if (Array.isArray(item)) {
                         return item.map((d) => {
-                            cppReqSet.add(d[req.query.xAxis]);
                             return {
                                 [req.query.xAxis]: d[req.query.xAxis],
                                 dr_no: d.dr_no
@@ -86,8 +84,11 @@ export async function retrieveData(req, res){
             //allData.push(...chunk); //added
         }
 
+
+
         console.log("saved dataset.json");
-        res.status(200).json({msg: [...cppReqSet]})
+        const result = retrieveXAxisData(req.query.xAxis)
+        res.status(200).json(result)
     } catch(error){
         console.error("Couldnt get crime data", error)
         res.status(400).json({msg: "failed to retrieve data"})
@@ -180,17 +181,11 @@ export async function retrieveDataTest(req, res){
         res.status(400).json({msg: "failed to retrieve data"})
     }
 }
-export async function retrieveXAxisData(req, res){ 
+export function retrieveXAxisData(xAxisReq){
     try{
-        const xAxis = req.query.Xaxis || "AREA NAME"; //default to area_name if not provided
+        const xAxis =  xAxisReq || "AREA NAME"; //default to area_name if not provided
         //let allData = []; was how i had it, this is to test
-        const allData = [
-        { "AREA NAME": "N Hollywood", "Crm Cd Desc": "THEFT", "Vict Sex": "M", "Vict Age": 30 },
-        { "AREA NAME": "N Hollywood", "Crm Cd Desc": "ASSAULT", "Vict Sex": "F", "Vict Age": 25 },
-        { "AREA NAME": "Van Nuys", "Crm Cd Desc": "THEFT", "Vict Sex": "M", "Vict Age": 40 },
-        { "AREA NAME": "Van Nuys", "Crm Cd Desc": "THEFT", "Vict Sex": "F", "Vict Age": 22 },
-        { "AREA NAME": "Wilshire", "Crm Cd Desc": "BURGLARY", "Vict Sex": "M", "Vict Age": 35 },
-        ];
+        const allData = [];
         //read
         for (let i = 0; i < 10; i++) {
             try {
@@ -215,9 +210,10 @@ export async function retrieveXAxisData(req, res){
             value: grouped[key]
         }));
         console.log("grouped data ready");
-        res.status(200).json(result);
+        // res.status(200).json(result);
+        return result
     } catch (error) {
         console.error("Error processing data:", error);
-        res.status(500).json({ msg: "Error processing data" });
+        // res.status(500).json({ msg: "Error processing data" });
     }
 }
