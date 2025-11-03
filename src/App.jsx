@@ -117,7 +117,8 @@ function App() {
 
 
         <div className='map'>
-          
+          <BarGraph x_axis_label={"BFS"} y_axis_label={"Crime Amount"} />
+          <BarGraph x_axis_label={"DFS"} y_axis_label={"Crime Amount"} />
         </div>
 
 
