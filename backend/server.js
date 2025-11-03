@@ -12,6 +12,12 @@ const app = express();
 app.use(cors()); //we'll write the location of front end here (its port)
 
 
+app.get('/test', (req, res) => {
+  res.send('Backend is working!');
+});
+// app.get('/retrieve-data', retrieveData);
+// app.get('/retrieve-xaxis-data', retrieveXAxisData);
+// app.get('/run-cpp', runCpp);
 
 app.use('/', router) //just using this for now so when you open localhost:3001 itll try and create the data file
 

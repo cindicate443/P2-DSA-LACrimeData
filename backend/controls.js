@@ -4,6 +4,8 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import fs from 'fs'
 import dotenv from 'dotenv'
+import { all } from 'axios'
+import { group } from 'console'
 
 dotenv.config()
 
@@ -15,6 +17,7 @@ export async function retrieveData(req, res){
     try{
         const cppReqSet = new Set()
         //http://localhost:3001/api/test?xAxis=(wtv u want)
+        const xAxis = req.query.Xaxis || "AREA"; //default to area_name if not provided
         const get20 = 20 // how many requests we make at a time
         let pageNumber = 1
         for(let i = 0; i < 10; i++){
@@ -79,9 +82,9 @@ export async function retrieveData(req, res){
                 }
             fs.writeFileSync(`crimeData_${i}.json`, JSON.stringify(chunk))
             console.log("input crimeData: ", i)
+
+            //allData.push(...chunk); //added
         }
-
-
 
         console.log("saved dataset.json");
         res.status(200).json({msg: [...cppReqSet]})
@@ -175,5 +178,46 @@ export async function retrieveDataTest(req, res){
     } catch(error){
         console.error("Couldnt get crime data", error)
         res.status(400).json({msg: "failed to retrieve data"})
+    }
+}
+export async function retrieveXAxisData(req, res){ 
+    try{
+        const xAxis = req.query.Xaxis || "AREA NAME"; //default to area_name if not provided
+        //let allData = []; was how i had it, this is to test
+        const allData = [
+        { "AREA NAME": "N Hollywood", "Crm Cd Desc": "THEFT", "Vict Sex": "M", "Vict Age": 30 },
+        { "AREA NAME": "N Hollywood", "Crm Cd Desc": "ASSAULT", "Vict Sex": "F", "Vict Age": 25 },
+        { "AREA NAME": "Van Nuys", "Crm Cd Desc": "THEFT", "Vict Sex": "M", "Vict Age": 40 },
+        { "AREA NAME": "Van Nuys", "Crm Cd Desc": "THEFT", "Vict Sex": "F", "Vict Age": 22 },
+        { "AREA NAME": "Wilshire", "Crm Cd Desc": "BURGLARY", "Vict Sex": "M", "Vict Age": 35 },
+        ];
+        //read
+        for (let i = 0; i < 10; i++) {
+            try {
+                const chunk = JSON.parse(fs.readFileSync(`crimeData_${i}.json`));
+                allData.push(...chunk);
+            } catch (err) {
+                console.error(`Error reading file crimeData_${i}.json:`, err);
+            }
+        }
+        //Grouped by x axis
+        const grouped = {};
+        allData.forEach(item => {
+            const key = item[xAxis] || "UNKNOWN";
+            if (grouped[key]) { //count the frequencies
+                grouped[key]++;
+            } else {
+                grouped[key] = 1;
+            }
+        });
+        const result = Object.keys(grouped).map(key => ({
+            label: key,
+            value: grouped[key]
+        }));
+        console.log("grouped data ready");
+        res.status(200).json(result);
+    } catch (error) {
+        console.error("Error processing data:", error);
+        res.status(500).json({ msg: "Error processing data" });
     }
 }
