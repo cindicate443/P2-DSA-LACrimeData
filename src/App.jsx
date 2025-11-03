@@ -16,6 +16,8 @@ function App() {
   const [message, setMessage] = useState("");
   const [type, setType] = useState("area");
   const [region, setRegion] = useState("N Hollywood");
+  const [xAxis, setXAxis] = useState("AREA NAME");
+  const [xAxisData, setXAxisData] = useState([]);
 
   const APP_TOKEN = "JZStIfxvIBLxyqzrOs41hWlyx" // api token from making an account with City of Los Angeles
   const api = `https://data.lacity.org/api/v3/views/2nrs-mtv8/query.json/`; // api using SODA3
@@ -31,6 +33,16 @@ function App() {
       .then(console.log)
       .then(setCppOutput)   // Directly set state
       .catch(err => setCppOutput("Error: " + err));
+  }
+
+  const fetchXAxisData = async (selectedAxis) => {
+    try {
+      const response = await axios.get("http://localhost:3001/retrieve-xaxis-data", { params: { Xaxis: selectedAxis } });
+      setXAxisData(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching X-axis data:", error);
+    }
   }
 
   const fetchAreaNames = () => {
@@ -128,10 +140,23 @@ function App() {
         <div>
           <button onClick={() => setSearchType("Display")}>Display!</button>
         </div>
-
-
-      </div>
-
+        <div className='x-axis-select'>
+          <label> Select X-Axis:
+            <select value={xAxis} onChange={(e) => { setXAxis(e.target.value); fetchXAxisData(e.target.value); }}>
+              <option value="area_name">Area</option>
+              <option value="crm_cd_desc">Crime Code</option>
+              <option value="vict_sex">Victim Sex</option>
+              <option value="vict_age">Victim Age</option>
+              <option value="premis_desc">Premise Description</option>
+            </select>
+          </label>
+        </div>
+            </div>
+            /* temporary and for testing purposes */
+            <div className='x-axis-results'>
+              <h3>Grouped Data Preview:</h3>
+              <pre>{JSON.stringify(xAxisData, null, 2)}</pre>
+            </div>
       {/* <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
