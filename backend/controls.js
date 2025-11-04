@@ -83,7 +83,6 @@ export async function retrieveData(req, res){
                 }
             fs.writeFileSync(`crimeData_${i}.json`, JSON.stringify(chunk))
             console.log("input crimeData: ", i)
-            allData.push(...chunk); //added
         }
 
         console.log("saved dataset.json");
