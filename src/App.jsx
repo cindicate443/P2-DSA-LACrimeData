@@ -117,8 +117,11 @@ function App() {
 
 
         <div className='map'>
-          <BarGraph x_axis_label={"BFS"} y_axis_label={"Crime Amount"} />
-          <BarGraph x_axis_label={"DFS"} y_axis_label={"Crime Amount"} />
+          {xAxisLoading && <div>Loading chart…</div>}
+          {xAxisError && <div style={{ color: 'red' }}>Error loading data: {xAxisError}</div>}
+          {!xAxisLoading && !xAxisError && (
+            <BarGraph groupedData={xAxisData} x_axis_label={xAxis} y_axis_label={"Count"} datasetLabel={`Counts by ${xAxis}`} />
+          )}
         </div>
 
 
