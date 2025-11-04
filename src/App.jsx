@@ -38,21 +38,23 @@ function App() {
       .catch(err => setCppOutput("Error: " + err));
   }
 
-  const fetchXAxisData = async (selectedAxis) => {
-    setXAxisLoading(true);
-    setXAxisError(null);
-    try {
-      const response = await axios.get(`/api/retrieve-xaxis-data`, { params: { Xaxis: selectedAxis } });
-      setXAxisData(response.data || []);
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error fetching X-axis data:", error);
-      setXAxisError(error.message || String(error));
-      setXAxisData([]);
-    } finally {
-      setXAxisLoading(false);
-    }
-  }
+  // const fetchXAxisData = ['Area', 'Area Name', 'crime committed', 'Victim Sex', 'Victim Descent', 'Premise Desc']
+
+  //     async (selectedAxis) => {
+  //   setXAxisLoading(true);
+  //   setXAxisError(null);
+  //   try {
+  //     const response = await axios.get(`/api/retrieve-xaxis-data`, { params: { Xaxis: selectedAxis } });
+  //     setXAxisData(response.data || []);
+  //     console.log(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching X-axis data:", error);
+  //     setXAxisError(error.message || String(error));
+  //     setXAxisData([]);
+  //   } finally {
+  //     setXAxisLoading(false);
+  //   }
+  // }
 
   const fetchAreaNames = () => {
     axios.get(api, { params: { query: "SELECT distinct area_name", app_token: APP_TOKEN } })
@@ -157,7 +159,7 @@ function App() {
         </div>
         <div className='x-axis-select'>
           <label> Select X-Axis:
-            <select value={xAxis} onChange={(e) => { setXAxis(e.target.value); fetchXAxisData(e.target.value); }}>
+            <select value={xAxis} onChange={(e) => { setXAxis(e.target.value); }}>
               <option value="AREA NAME">Area</option>
               <option value="Crm Cd Desc">Crime Code</option>
               <option value="Vict Sex">Victim Sex</option>
