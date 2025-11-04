@@ -176,7 +176,7 @@ export async function retrieveDataTest(req, res){
                     Array.isArray(item) ?
                         item.map(d => ({
                             [req.query.xAxis]: d[req.query.xAxis],
-                            dr_no: dr_no
+                            dr_no: d.dr_no
                         }))
                         : [])
 
@@ -198,8 +198,7 @@ export async function retrieveDataTest(req, res){
 }
 export function retrieveXAxisData(xAxisReq){
     try{
-        const xAxis =  xAxisReq || "AREA NAME"; //default to area_name if not provided
-        //let allData = []; was how i had it, this is to test
+        const xAxis =  xAxisReq;
         const allData = [];
         //read
         for (let i = 0; i < 10; i++) {
@@ -225,10 +224,8 @@ export function retrieveXAxisData(xAxisReq){
         const lisXVals = [...Object.keys(grouped), maxYVal]
 
         console.log("grouped data ready");
-        // res.status(200).json(result);
         return lisXVals
     } catch (error) {
         console.error("Error processing data:", error);
-        // res.status(500).json({ msg: "Error processing data" });
     }
 }
