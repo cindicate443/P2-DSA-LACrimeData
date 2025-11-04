@@ -87,8 +87,7 @@ export async function retrieveData(req, res){
 
         console.log("saved dataset.json");
         const result = retrieveXAxisData(req.query.xAxis)
-        runCpp(cppReqSet)
-        res.status(200).json(result)
+        res.status(200).json({vals: result, tree: await runCpp(cppReqSet)})
     } catch(error){
         console.error("Couldnt get crime data", error)
         res.status(400).json({msg: "failed to retrieve data"})
@@ -96,9 +95,20 @@ export async function retrieveData(req, res){
 }
 
 export function runCpp(cppReqSet){
+        let res = ''
         const filesToCompile = "tree.cpp crime.cpp"
         const exeName = process.platform == "win32" ? "P2-DSA_LACrimeData.exe" : "P2-DSA-LACrimeData"
+        const exeLoc = path.join(__dirname, "cpp", "build", exeName)
+        const fileLoc = path.join(__dirname, "cpp")
+        console.log(exeLoc)
+        exec(`g++ -std=c++17 ${filesToCompile} -o ${exeLoc}`, {cwd: fileLoc}, (error, stdout, stderr) =>{
+            if(error) {
+                console.log("failed to compile ", exeName, error.message)
+                return "Failed to compile";
+            }
 
+            console.log(`Compiled ${exeName}!`)
+        })
 
         const binPath = path.join(__dirname, "cpp", "build", process.platform === 'win32' ? 'P2-DSA-LACrimeData.exe' : 'P2-DSA-LACrimeData'); //Executable path
         if (!fs.existsSync(binPath)) {
@@ -106,22 +116,33 @@ export function runCpp(cppReqSet){
         }
 
         const args = [...cppReqSet];
-    const cppProc = spawn(binPath, args, {
-        cwd: path.join(__dirname, "cpp", "build")
-    });
-
-
-    cppProc.stdout.on("data", (data) =>{
-        process.stdout.write(data)
-    })
-
-        cppProc.stderr.on("data", (data) => {
-            console.error("C++ stderr:", data.toString());
+    return new Promise((resolve, reject) => {
+        const cppProc = spawn(binPath, args, {
+            cwd: path.join(__dirname, "cpp", "build")
         });
+
+
+        cppProc.stdout.on("data", (data) => {
+            // process.stdout.write(data)
+            const text = data.toString()
+            res += (text)
+        })
+
+        // cppProc.stderr.on("data", (data) => {
+        //     console.error("C++ stderr:", data.toString());
+        //     return "Error " + data.toString();
+        // });
 
         cppProc.on("close", (code) => {
             console.log(`C++ process exited with code ${code}`);
+            resolve(res)
         });
+
+        cppProc.on('error', reject)
+
+        // const result = [...res]
+
+    })
 }
 
 

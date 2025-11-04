@@ -5,9 +5,9 @@ int main(int argc, char* argv[]) {
 
     CrimeTree tree;
     tree.grabJsonData();
-    tree.printAllSubtrees();
-
-
+    // tree.printAllSubtrees();
+    // tree.bfsAlg();
+    tree.dfsAlg();
 
     // ifstream input("crimeData.json");
     // if (!input) {

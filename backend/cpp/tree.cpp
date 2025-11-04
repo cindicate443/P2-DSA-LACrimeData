@@ -2,7 +2,15 @@
 // Created by Christopher Silva on 10/26/25.
 //
 #include "tree.h"
-
+#if __has_include(<filesystem>)
+#include <filesystem>
+namespace fs = std::filesystem;
+#elif __has_include(<experimental/filesystem>)
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+#else
+#error "No filesystem support"
+#endif
 
 /*
  *bfs alg is self explanatory
@@ -110,6 +118,7 @@
 
     //now implement bfs and dfs
     void CrimeTree::bfsAlg() {
+        valsForFrontEnd.clear();
         queue<Node*> q;
         auto itr = roots.begin();
         while (itr != roots.end()) {
@@ -126,7 +135,8 @@
                 Node *node = q.front();
                 q.pop();
 
-                cout << q.front()->dr_num << " " << q.front()->val << endl;
+                valsForFrontEnd[q.front()->val]++;
+                cout << valsForFrontEnd[q.front()->val] <<" " << q.front()->val<< endl;
 
                 if (node->left != nullptr)
                     q.push(node->left);
@@ -141,6 +151,7 @@
 
     void CrimeTree::dfsAlg() {
         //basically inorder traversal right? i hope
+        valsForFrontEnd.clear();
         auto itr = roots.begin();
         while (itr != roots.end()) {
             inorderTraversal(itr->second);
@@ -157,7 +168,8 @@
         //there is one dr_no that is particularly small. its 0817.
         //everything should still work so i hope that doesnt ruin stuff
 
-        cout << root->dr_num << " " << root->val << endl;
+        cout << valsForFrontEnd[root->val]++ << " " << root->val << endl;
+
         // this->count++;
         inorderTraversal(root->right);
 
