@@ -108,14 +108,7 @@ function App() {
         <button onClick={() => handleFetch()}>call node api</button>
         <p>message: {message}</p>
 
-        <label> Select region
-          <select>
-            {areas.map((item, key) => {
-              return (
-                <option key={key} value={item.area_name}>{item.area_name}</option>
-              )})}
-          </select>
-        </label>
+
 
 
 
@@ -128,26 +121,7 @@ function App() {
         </div>
 
 
-        <div className='controls'>
-        <label> Longitude
-          <select>
-            {lon.map((item, key) => {
-              return (
-                <option key={key} value={item.lon}>{item.lon}</option>
-              )})}
-          </select>
-        </label>
 
-        <label> Latitude
-          <select>
-            {lat.map((item, key) => {
-              return (
-                <option key={key} value={item.lat}>{item.lat}</option>
-              )})}
-          </select>
-        </label>
-
-        </div>
 
         <div className='search-buttons'>
           <button onClick={() => setSearchType("DFS")}>DFS Search</button>
