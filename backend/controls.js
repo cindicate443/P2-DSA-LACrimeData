@@ -1,4 +1,5 @@
-import { execFile } from 'child_process'
+/* eslint-env node */
+import { execFile, exec, spawn } from 'child_process'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import fs from 'fs'
