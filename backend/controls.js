@@ -12,20 +12,21 @@ const __dirname = path.dirname(__filename);
 
 
 export async function retrieveData(req, res){
+    console.log("like right here")
     try{
         //http://localhost:3001/api/test?xAxis=(wtv u want)&alg=(bfs/dfs)
         // const xAxis = req.query.Xaxis || "AREA"; //default to area_name if not provided
         const get20 = 20 // how many requests we make at a time
         let pageNumber = 1
-        for(let i = 0; i < 1; i++){
+        for(let i = 0; i < 10; i++){
             console.log(`trying page ${i}`)
             let chunk = []
-            for(let k = 1; k < 21; k+=get20){
+            for(let k = 1; k < 201; k+=get20){
 
 
                 let requests = [] // we will house all fetch requests in this array
 
-                for (let j = k; j < k + get20 && j < 21; j++) {
+                for (let j = k; j < k + get20 && j < 201; j++) {
 
                     requests.push(fetch(process.env.DATA_API +
                         "?pageNumber=" + pageNumber +
@@ -98,6 +99,7 @@ export function runCpp(alg){
         const exeName = process.platform == "win32" ? "P2-DSA_LACrimeData.exe" : "P2-DSA-LACrimeData"
         const exeLoc = path.join(__dirname, "cpp", "build", exeName)
         const fileLoc = path.join(__dirname, "cpp")
+
         exec(`g++ -std=c++17 ${filesToCompile} -o ${exeLoc}`, {cwd: fileLoc}, (error, stdout, stderr) =>{
             if(error) {
                 console.log("failed to compile ", exeName, error.message)
@@ -107,7 +109,7 @@ export function runCpp(alg){
             console.log(`Compiled ${exeName}!`)
         })
 
-        const binPath = path.join(__dirname, "cpp", "build", process.platform === 'win32' ? 'P2-DSA-LACrimeData.exe' : 'P2-DSA-LACrimeData'); //Executable path
+        const binPath = path.join(__dirname, "cpp", "build", exeName); //Executable path
         if (!fs.existsSync(binPath)) {
             throw new Error("Cant find exe at ", binPath)
         }
