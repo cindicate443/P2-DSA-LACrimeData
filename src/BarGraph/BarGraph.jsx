@@ -21,21 +21,25 @@ ChartJS.register(
 
 const BarGraph = ({ groupedData = [], x_axis_label = 'X', y_axis_label = 'Count', datasetLabel = 'Count' }) => {
     // groupedData expected shape: [{ label: 'Some value', value: 123 }, ...]
-    const labels = Array.isArray(groupedData) ? groupedData.map(d => d.label) : [];
-    const dataValues = Array.isArray(groupedData) ? groupedData.map(d => d.value) : [];
+    const labels = groupedData["xAxisVals"];
 
-    const lineChartData = {
-        labels,
-        datasets: [
-            {
-                label: datasetLabel,
-                data: dataValues,
-                backgroundColor: 'rgba(125, 20, 190, 0.8)',
-                borderColor: 'rgba(56, 12, 83, 1)',
-                borderWidth: 1,
-            },
-        ],
-    };
+    let dataValues;
+    let lineChartData;
+    // for(let i = 0; i < groupedData["tree"].length; i++) {
+    //     dataValues
+        lineChartData = {
+            labels,
+            datasets: [
+                {
+                    label: datasetLabel,
+                    data: dataValues,
+                    backgroundColor: 'rgba(125, 20, 190, 0.8)',
+                    borderColor: 'rgba(56, 12, 83, 1)',
+                    borderWidth: 1,
+                },
+            ],
+        };
+    // }
 
     const options = {
         scales: {
@@ -74,7 +78,7 @@ const BarGraph = ({ groupedData = [], x_axis_label = 'X', y_axis_label = 'Count'
     };
 
     return  (
-        <div style={{ maxWidth: '800px', width: '100%' }}>
+        <div style={{ maxWidth: '990px', width: '100%' }}>
             <Bar options={options} data={lineChartData}></Bar>
         </div>
     )

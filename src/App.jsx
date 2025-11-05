@@ -17,7 +17,7 @@ function App() {
   const [message, setMessage] = useState("");
   const [type, setType] = useState("area");
   const [region, setRegion] = useState("N Hollywood");
-  const [xAxis, setXAxis] = useState("AREA NAME");
+  const [xAxis, setXAxis] = useState("area");
   const [xAxisData, setXAxisData] = useState([]);
   const [xAxisLoading, setXAxisLoading] = useState(false);
   const [xAxisError, setXAxisError] = useState(null);
@@ -27,7 +27,7 @@ function App() {
 
   // List of search types for buttons
   //const searchTypes = ["DFS", "BFS", "DISPLAY"];
-  const [searchType, setSearchType] = useState("hello"); // using useState instead or array bc its easier to keep track when clicked (i.e onClick event)
+  const [searchType, setSearchType] = useState(""); // using useState instead or array bc its easier to keep track when clicked (i.e onClick event)
 
   const search = (type) => {
     // Make HTTP request to backend
@@ -91,6 +91,20 @@ function App() {
 
   }
 
+  const handleDisplay = async (e) => {
+    try{
+      if(!searchType){
+        console.log("No search type selected please choose before continuing!")
+        return;
+      }
+      const response = await axios.get(`http://localhost:3001/api/test?xAxis=${xAxis}&alg=${searchType}`)
+      setXAxisData(response.data)
+
+    } catch(error){
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     fetchAreaNames();
     fetchLAT();
@@ -124,21 +138,25 @@ function App() {
 
 
         <div className='search-buttons'>
-          <button onClick={() => setSearchType("DFS")}>DFS Search</button>
-          <button onClick={() => setSearchType("BFS")}>BFS Search</button>
+          <button onClick={() => setSearchType("dfs")}>DFS Search</button>
+          <button onClick={() => setSearchType("bfs")}>BFS Search</button>
         </div>
 
         <div>
-          <button onClick={() => setSearchType("Display")}>Display!</button>
+          <button onClick={() => handleDisplay()}>Display!</button>
         </div>
         <div className='x-axis-select'>
           <label> Select X-Axis:
             <select value={xAxis} onChange={(e) => { setXAxis(e.target.value); }}>
-              <option value="AREA NAME">Area</option>
-              <option value="Crm Cd Desc">Crime Code</option>
-              <option value="Vict Sex">Victim Sex</option>
-              <option value="Vict Age">Victim Age</option>
-              <option value="Premis Desc">Premise Description</option>
+              <option value="area_name">Area Name</option>
+              <option value="area">Area</option>
+              <option value="crm_cd_desc">Crime Committed</option>
+              <option value="vict_sex">Victim Sex</option>
+              <option value="vict_age">Victim Age</option>
+              <option value="premis_desc">Premise Description</option>
+              <option value="weapon_desc">Weapon Used</option>
+              <option value="status_desc">Case Status</option>
+            {/*  is it possible to add location?*/}
             </select>
           </label>
         </div>
