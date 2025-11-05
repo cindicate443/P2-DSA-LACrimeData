@@ -12,21 +12,20 @@ const __dirname = path.dirname(__filename);
 
 
 export async function retrieveData(req, res){
-    console.log("like right here")
     try{
         //http://localhost:3001/api/test?xAxis=(wtv u want)&alg=(bfs/dfs)
         // const xAxis = req.query.Xaxis || "AREA"; //default to area_name if not provided
         const get20 = 20 // how many requests we make at a time
         let pageNumber = 1
-        for(let i = 0; i < 10; i++){
+        for(let i = 0; i < 1; i++){
             console.log(`trying page ${i}`)
             let chunk = []
-            for(let k = 1; k < 201; k+=get20){
+            for(let k = 1; k < 21; k+=get20){
 
 
                 let requests = [] // we will house all fetch requests in this array
 
-                for (let j = k; j < k + get20 && j < 201; j++) {
+                for (let j = k; j < k + get20 && j < 21; j++) {
 
                     requests.push(fetch(process.env.DATA_API +
                         "?pageNumber=" + pageNumber +
@@ -86,7 +85,7 @@ export async function retrieveData(req, res){
 
         console.log("saved dataset.json");
         const result = retrieveXAxisData(req.query.xAxis)
-        res.status(200).json({result, tree: await runCpp(req.query.alg)})
+        res.status(200).json({xAxisVals: result[0], yAxisMax: result[1], tree: await runCpp(req.query.alg)})
     } catch(error){
         console.error("Couldnt get crime data", error)
         res.status(400).json({msg: "failed to retrieve data"})
@@ -223,7 +222,7 @@ export function retrieveXAxisData(xAxisReq){
         });
 
         const maxYVal = Math.max(...Object.values(grouped))
-        const lisXVals = [...Object.keys(grouped), maxYVal]
+        const lisXVals = [[...Object.keys(grouped)], [maxYVal]]
 
         console.log("grouped data ready");
         return lisXVals
