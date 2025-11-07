@@ -12,9 +12,9 @@ const app = express();
 app.use(cors()); //we'll write the location of front end here (its port)
 
 
-app.get('/test', (req, res) => {
-  res.send('Backend is working!');
-});
+// app.get('/test', (req, res) => {
+//   res.send('Backend is working!');
+// });
 // app.get('/retrieve-data', retrieveData);
 // app.get('/retrieve-xaxis-data', retrieveXAxisData);
 // app.get('/run-cpp', runCpp);
