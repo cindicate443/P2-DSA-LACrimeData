@@ -27,7 +27,7 @@ function Building({ xAxis }) {
                 const counts = Array(xVals.length).fill(0);
                 snap.split('|').forEach(part => {
                     const keyMatch = part.match(/key:\s*(\S+)/);
-                    const countMatch = part.match(/count:\s*(\d+)/);
+                    const countMatch = part.match(/frequency:\s*(\d+)/);
                     //if key and count found, update counts
                     if (keyMatch && countMatch) {
                         const key = keyMatch[1]; //get actual key string
