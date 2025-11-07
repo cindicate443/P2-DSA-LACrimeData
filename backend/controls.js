@@ -85,7 +85,7 @@ export async function retrieveData(req, res){
 
         console.log("saved dataset.json");
         const result = retrieveXAxisData(req.query.xAxis)
-        res.status(200).json({xAxisVals: result[0], yAxisMax: result[1], tree: await runCpp(req.query.alg)})
+        res.status(200).json({grouped: result, tree: await runCpp(req.query.alg)})
     } catch(error){
         console.error("Couldnt get crime data", error)
         res.status(400).json({msg: "failed to retrieve data"})
@@ -201,6 +201,7 @@ export function retrieveXAxisData(xAxisReq){
     try{
         const xAxis =  xAxisReq;
         const allData = [];
+        
         //read
         for (let i = 0; i < 10; i++) {
             try {
@@ -221,12 +222,11 @@ export function retrieveXAxisData(xAxisReq){
             }
         });
 
-        const maxYVal = Math.max(...Object.values(grouped))
-        const yVals = Object.values(grouped);
-        const lisXVals = [[...Object.keys(grouped)], [maxYVal]]
-
-        console.log("grouped data ready");
-        return lisXVals
+            const maxYVal = Math.max(...Object.values(grouped))
+            const yVals = Object.values(grouped);
+            const groupedArray = Object.keys(grouped)
+            .map(k => ({ label: k, value: grouped[k] }))
+        return groupedArray
     } catch (error) {
         console.error("Error processing data:", error);
     }

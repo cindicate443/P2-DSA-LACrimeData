@@ -9,8 +9,11 @@ function Building({ xAxis }) {
         try {
             const response = await fetch(`http://localhost:3001/api/test?alg=${alg}`);
             const data = await response.json();
-            const xVals = data.xAxisVals;
-            const yVals = data.yAxisVals;
+
+            const groupedArray = data.grouped;
+            const xVals = groupedArray.map(d => d.label);
+            const yVals = groupedArray.map(d => d.value);
+            
             let animatedVals = Array(xVals.length).fill(0);
             setGroupedData({ xAxisVals: xVals, yAxisVals: animatedVals });
             for (let i = 0; i < xVals.length; i++) {

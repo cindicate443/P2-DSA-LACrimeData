@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import './App.css'
 import BarGraph from './BarGraph/BarGraph';
@@ -142,12 +142,9 @@ function App() {
         <div className='search-buttons'>
           <button onClick={() => setSearchType("dfs")}>DFS Search</button>
           <button onClick={() => setSearchType("bfs")}>BFS Search</button>
-          <button onClick={() => setSearchType("dfs")}>DFS Search</button>
-          <button onClick={() => setSearchType("bfs")}>BFS Search</button>
         </div>
 
         <div>
-          <button onClick={() => handleDisplay()}>Display!</button>
           <button onClick={() => handleDisplay()}>Display!</button>
         </div>
         <div className='x-axis-select'>
