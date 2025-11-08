@@ -37,38 +37,7 @@ const BarGraph = ({
     // // let lineChartData;
     let freqArr = []
     if(values.length !== 0) freqArr = values.split('\n')
-    // //now there all in there own little groups within changeThisName liek arrs
-    // for(let i = 0; i < groupedData["tree"].length; i++) {
-        // dataValues = [1] this isnt right i was just rtying stuff
-    // let indivFreq = []
-    // if(freqArr.length !== 0) indivFreq = freqArr.split('|')
-    // console.log(indivFreq)
 
-    // useEffect(() =>{
-
-        // const snapshots = data.tree
-        //     .split('\r\n')
-            // .filter(line => line.trim() !== '')//There MIGHT be empty lines idk
-            // .map(snap => {
-            //     const counts = Array(xVals.length).fill(0);
-            //     snap.split('|').forEach(part => {
-            //         const keyMatch = part.match(/key:\s*(\S+)/);
-            //         const countMatch = part.match(/frequency:\s*(\d+)/);
-            //         //if key and count found, update counts
-            //         if (keyMatch && countMatch) {
-            //             const key = keyMatch[1]; //get actual key string
-            //             const count = parseInt(countMatch[1], 10); //Convert to number
-            //             //Find index of key in x labels
-            //             const index = xVals.indexOf(key);
-            //             if (index !== -1) { //assuming it exists store it
-            //                 counts[index] = count;
-            //             }
-            //         }
-            //     });
-            // }
-
-
-    // }, [dataSet])
 
         const [chartData, setChartData] = useState(() => ({
             labels: groupedData.xAxisVals,
@@ -82,7 +51,6 @@ const BarGraph = ({
                 },
             ],
         }));
-    // }
 
     const options = useMemo(() => ({
         responsive: true,
@@ -103,7 +71,7 @@ const BarGraph = ({
 
         },
             animation: { //build animation
-                duration: 300, // (500 was too quick)
+                duration: 100, // (500 was too quick)
                 easing: 'linear', //steady instead
         },
     }), [datasetLabel, groupedData["yAxisMax"]]);
