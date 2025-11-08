@@ -222,11 +222,10 @@ export function retrieveXAxisData(xAxisReq){
             }
         });
 
-            const maxYVal = Math.max(...Object.values(grouped))
-            const yVals = Object.values(grouped);
-            const groupedArray = Object.keys(grouped)
-            .map(k => ({ label: k, value: grouped[k] }))
-        return groupedArray
+        const maxYVal = Math.max(...Object.values(grouped))
+        const lisXVals = [...Object.keys(grouped), maxYVal]
+        console.log("grouped data ready");
+        return lisXVals
     } catch (error) {
         console.error("Error processing data:", error);
     }

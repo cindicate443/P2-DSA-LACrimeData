@@ -55,7 +55,7 @@ function Building({ xAxis }) {
             // });
             // console.log("Traversal order parsed:", traversalOrder); //i forgot what this even prints
 
-            setTreeSnapshots(snapshots);
+            setTreeSnapshots(snap);
         }
         catch (error) {
             console.error('Error fetching graph data:', error);
