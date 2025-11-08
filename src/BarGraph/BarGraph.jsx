@@ -24,8 +24,10 @@ const BarGraph = ({ groupedData = [], x_axis_label = 'X', y_axis_label = 'Count'
 
     let dataValues;
     let lineChartData;
-    // let values = groupedData["tree"]
-    // let changeThisName = values.split('\n')) //now there all in there own little groups within changeThisName liek arrs
+    let values = groupedData["tree"] || []
+    // let arrFreq = values.split('\n') //now there all in there own little groups within changeThisName liek arrs
+    let arrFreq;
+    if(values.length > 0) arrFreq = values.split('\n')
     // for(let i = 0; i < groupedData["tree"].length; i++) {
 
         // dataValues = [1] this isnt right i was just rtying stuff
