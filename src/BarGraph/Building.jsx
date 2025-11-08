@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react' //For bar graph
 import BarGraph from './BarGraph';
-import { build } from 'vite';
 
 function Building({ xAxis }) {
     const [groupedData, setGroupedData] = useState({ xAxisVals: [], yAxisVals: [] }); //x and y axis data

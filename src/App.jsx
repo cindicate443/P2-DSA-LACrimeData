@@ -82,16 +82,16 @@ function App() {
     })
   }
 
-  const handleFetch = async (e) => {
-    try {
-      const response = await axios.get(`http://localhost:3001/test`);
-      setMessage(response.data);
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-
-  }
+  // const handleFetch = async (e) => {
+  //   try {
+  //     const response = await axios.get(`http://localhost:3001/test`);
+  //     setMessage(response.data);
+  //     console.log(response.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  //
+  // }
 
   const handleDisplay = async (e) => {
     try{
@@ -101,7 +101,7 @@ function App() {
       }
       const response = await axios.get(`http://localhost:3001/api/test?xAxis=${xAxis}&alg=${searchType}`)
   // backend returns { grouped: [...], tree: '...' }
-  setXAxisData(response.data.grouped || [])
+  setXAxisData(response.data || [])
 
     } catch(error){
       console.log(error)
@@ -114,16 +114,20 @@ function App() {
     fetchLON();
   }, [])
 
+  // useEffect(() => {
+  //
+  // }, [searchType])
+
   return (
-    <>
+    <div>
       <nav className='nav-cont'>
-        <h1 id = "title" >Crime Data Explorer</h1>
+        <span><h1 id = "title" >Crime Data Explorer</h1></span>
       </nav>
 
       <div className='main'>
         {/* <Building xAxis={xAxis} /> */}
-        <button onClick={() => handleFetch()}>call node api</button>
-        <p>message: {message}</p>
+        {/*<button onClick={() => handleFetch()}>call node api</button>*/}
+        {/*<p>message: {message}</p>*/}
 
 
 
@@ -133,54 +137,55 @@ function App() {
           {xAxisLoading && <div>Loading chart…</div>}
           {xAxisError && <div style={{ color: 'red' }}>Error loading data: {xAxisError}</div>}
           {!xAxisLoading && !xAxisError && (
-            <BarGraph groupedData={xAxisData} x_axis_label={xAxis} y_axis_label={"Count"} datasetLabel={`Counts by ${xAxis}`} />
+            <BarGraph groupedData={xAxisData} x_axis_label={xAxis} y_axis_label={"Count"} datasetLabel={`LA Crime Data`} />
           )}
         </div>
 
 
 
+        <div className='x-axis-select'>
+          <label> Select X-Axis:
+            <select id = "dropDown"  onChange={(e) => { setXAxis(e.target.value); }}>
+              <option id = "hiddenOption" value="select">--Select--</option>
+              <option value="area_name">Area Name</option>
+              <option value="area">Area</option>
+              {/*<option value="crm_cd_desc">Crime Committed</option>*/}
+              <option value="vict_sex">Victim Sex</option>
+              <option value="vict_age">Victim Age</option>
+              {/*<option value="premis_desc">Premise Description</option>*/}
+              {/*<option value="weapon_desc">Weapon Used</option>*/}
+              <option value="status_desc">Case Status</option>
+              {/*  is it possible to add location?*/}
+              {/*  <option value="area_name">Area Name</option>*/}
+              {/*  <option value="area">Area</option>*/}
+              {/*  <option value="crm_cd_desc">Crime Committed</option>*/}
+              {/*  <option value="vict_sex">Victim Sex</option>*/}
+              {/*  <option value="vict_age">Victim Age</option>*/}
+              {/*  <option value="premis_desc">Premise Description</option>*/}
+              {/*  <option value="weapon_desc">Weapon Used</option>*/}
+              {/*  <option value="status_desc">Case Status</option>*/}
+              {/*  is it possible to add location?*/}
+            </select>
+          </label>
+        </div>
 
         <div className='search-buttons'>
-          <button onClick={() => setSearchType("dfs")}>DFS Search</button>
-          <button onClick={() => setSearchType("bfs")}>BFS Search</button>
+          <button className = "searchButton" onClick={() => setSearchType("dfs")}>DFS Search</button>
+          <button className = "searchButton" onClick={() => setSearchType("bfs")}>BFS Search</button>
           {/* <button onClick={() => buildGraph("dfs")}>DFS Search</button>
           <button onClick={() => buildGraph("bfs")}>BFS Search</button> */}
         </div>
 
         <div>
-          <button onClick={() => handleDisplay()}>Display!</button>
+          <button id = "displayButton" onClick={() => handleDisplay()}>Display!</button>
         </div>
-        <div className='x-axis-select'>
-          <label> Select X-Axis:
-            <select value={xAxis} onChange={(e) => { setXAxis(e.target.value); }}>
-              <option value="area_name">Area Name</option>
-              <option value="area">Area</option>
-              <option value="crm_cd_desc">Crime Committed</option>
-              <option value="vict_sex">Victim Sex</option>
-              <option value="vict_age">Victim Age</option>
-              <option value="premis_desc">Premise Description</option>
-              <option value="weapon_desc">Weapon Used</option>
-              <option value="status_desc">Case Status</option>
-            {/*  is it possible to add location?*/}
-              <option value="area_name">Area Name</option>
-              <option value="area">Area</option>
-              <option value="crm_cd_desc">Crime Committed</option>
-              <option value="vict_sex">Victim Sex</option>
-              <option value="vict_age">Victim Age</option>
-              <option value="premis_desc">Premise Description</option>
-              <option value="weapon_desc">Weapon Used</option>
-              <option value="status_desc">Case Status</option>
-            {/*  is it possible to add location?*/}
-            </select>
-          </label>
-        </div>
+
             </div>
-            /* temporary and for testing purposes */
-            <div className='x-axis-results'>
-              <h3>Grouped Data Preview:</h3>
-              <pre>{JSON.stringify(xAxisData, null, 2)}</pre>
-            </div>
-    </>
+            {/*<div className='x-axis-results'>*/}
+            {/*  <h3>Grouped Data Preview:</h3>*/}
+            {/*  <pre>{JSON.stringify(xAxisData, null, 2)}</pre>*/}
+            {/*</div>*/}
+    </div>
   )
 }
 

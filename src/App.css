@@ -4,9 +4,56 @@
 }
 
 .nav-cont {
-  background: linear-gradient(to bottom, #0021A5 80%, #FA4616 10%);
+  background: linear-gradient(to bottom, #0021A5 86%, #FA4616 30%);
   text-align: center;
   height: 50px;
+}
+
+button{
+  background-color: #FA4616;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: bold;
+  border: none;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
+  color: #0021A5;
+}
+button:active {
+  transform: translateY(5px);
+}
+
+
+#dropDown {
+  margin-left: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 5px;
+  background-color:#C8C8C8;
+  border: 2px solid black;
+  width: 140px;
+  height: 30px;
+  border-radius: 6px;
+}
+
+
+label {
+  color: #0021A5;
+  font-weight: bold;
+  font-size: 20px;
+}
+.searchButton {
+  margin: 10px 10px;
+  width: 100px;
+  height: 50px;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+#displayButton {
+  width: 150px;
+  height: 50px;
+  border-radius: 10px;
+  font-size: 20px;
+
 }
 
 #title {
@@ -17,6 +64,21 @@
   color: #FA4616;
 }
 
+.main{
+  margin-top: 20px;
+}
+
+span{
+  text-shadow:
+          -1px -1px 0 black,
+          1px -1px 0 black,
+          -1px 1px 0 black,
+          1px 1px 0 black;
+}
+
+.uh{
+  background-color:black;
+}
 .main {
   display: flex;
   flex-direction: column;

@@ -221,9 +221,9 @@ export function retrieveXAxisData(xAxisReq){
             }
         });
 
-        // const maxYVal = Math.max(...Object.values(grouped))
+        const maxYVal = Math.max(...Object.values(grouped))
         const yVals = Object.values(grouped);
-        const lisXVals = [[...Object.keys(grouped)]]
+        const lisXVals = [[...Object.keys(grouped)], maxYVal]
 
         console.log("grouped data ready");
         return lisXVals
