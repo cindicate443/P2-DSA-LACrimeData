@@ -1,19 +1,11 @@
-# React + Vite
+This project was made using React, Express, Nodejs, and C++!
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+In order to run it you should first clone the github repo into your IDE of choice though keep in mind that this was only tested within CLion and VScode.
 
-Currently, two official plugins are available:
+Then you should follow the instructions inside .example.env on how to get your own secret token and choose your desired port. HOWEVER, if you are a grader (you got the proposal) you should look where this repo is linked and instead copy those into the .env file to avoid making your own account with socrata. Thats if you wish to do so you can just get the token from socrata all the same following example.env.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Within the main project folder then run npm i or npm install to download all dependencies. then move cd into backend folder and also run npm i or npm install.
 
-## React Compiler
+Then you should be good to go! Within main project folder run npm run dev and within backend run "node server.js". This will start the server and the react page. 
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-# P2-DSA-LACrimeData
-# P2-DSA-LACrimeData
-# P2-DSA-LACrimeData
+Here what you can do is pretty intuitive. Click whichever search you want, choose what data youd like to see. Then click display and wait around 5-8 seconds for the graph to start building and be in awe of the difference in how bfs and dfs displays searches for information in trees.
