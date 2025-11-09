@@ -34,6 +34,7 @@ export async function retrieveData(req, res){
                         "&orderingSpecifier=discard" +
                         "&app_token=" + process.env.SECRET_TOKEN))
                     pageNumber++;
+                    }
 
                //Wait for everything to finish
                 const response = await Promise.all(requests)
