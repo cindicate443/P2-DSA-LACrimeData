@@ -9,3 +9,6 @@ Within the main project folder then run npm i or npm install to download all dep
 Then you should be good to go! Within main project folder run npm run dev and within backend run "node server.js". This will start the server and the react page. 
 
 Here what you can do is pretty intuitive. Click whichever search you want, choose what data youd like to see. Then click display and wait around 5-8 seconds for the graph to start building and be in awe of the difference in how bfs and dfs displays searches for information in trees.
+
+
+TLDR: clone repo, run npm i in main project folder then in backend folder, make a .env file within backend folder and add in the secret token from the proposal given. then run npm run dev in main folder and node server.js in backend folder and youre ready to go.
