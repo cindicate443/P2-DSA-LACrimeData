@@ -10,21 +10,22 @@ dotenv.config()
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
+//Function to get data using API
 export async function retrieveData(req, res){
     try{
         //http://localhost:3001/api/test?xAxis=(wtv u want)&alg=(bfs/dfs)
-        // const xAxis = req.query.Xaxis || "AREA"; //default to area_name if not provided
         const getXAmt = 200 // how many requests we make at a time
         let pageNumber = 1
-        for(let i = 0; i < 10; i++){
+        for(let i = 0; i < 10; i++){ //Do 10
             console.log(`trying page ${i}`)
             let chunk = []
+            //We want to request in parts
             for(let k = 1; k < 201; k+=getXAmt){
 
 
                 let requests = [] // we will house all fetch requests in this array
 
+                //Add requests to the request array
                 for (let j = k; j < k + getXAmt && j < 201; j++) {
 
                     requests.push(fetch(process.env.DATA_API +
@@ -33,10 +34,8 @@ export async function retrieveData(req, res){
                         "&orderingSpecifier=discard" +
                         "&app_token=" + process.env.SECRET_TOKEN))
                     pageNumber++;
-                }
 
-
-               //DATA_API and SECRET_TOKEN are hidden in the .env file.
+               //Wait for everything to finish
                 const response = await Promise.all(requests)
 
                 /*
@@ -46,14 +45,9 @@ export async function retrieveData(req, res){
                 we have it set to 20 for now so we dont get blocked by the api
                 i personally am to afraid to go higher than that for now
                  */
+                const jsonArr = await Promise.all(response.map(r => r.json())) //make everything json
 
-                const jsonArr = await Promise.all(response.map(r => r.json()))
-
-
-
-                //turn all the response into json so we can put them into file
-
-
+                //We only want certain fields for the JSON
                 const filter = jsonArr.flatMap((item) => {
                     if (Array.isArray(item)) {
                         return item.map((d) => {
@@ -71,8 +65,6 @@ export async function retrieveData(req, res){
                 /*
                 this will filter the data so that we only have certain values. that are requested
                  */
-
-
                 chunk.push(...filter)
                 /*
                 this chunk we just aquired after all that will now be inputted into the file so we
@@ -83,6 +75,7 @@ export async function retrieveData(req, res){
             console.log("input crimeData: ", i)
         }
 
+        //Assuming everything worked, group the data and run the cpp
         console.log("saved dataset.json");
         const result = retrieveXAxisData(req.query.xAxis)
         res.status(200).json({xAxisVals: result[0], yAxisMax: result[1], tree: await runCpp(req.query.alg)})
@@ -91,7 +84,7 @@ export async function retrieveData(req, res){
         res.status(400).json({msg: "failed to retrieve data"})
     }
 }
-
+//Compile the cpp
 export function runCpp(alg){
         let res = ''
         const filesToCompile = "tree.cpp crime.cpp"
@@ -99,6 +92,7 @@ export function runCpp(alg){
         const exeLoc = path.join(__dirname, "cpp", "build", exeName)
         const fileLoc = path.join(__dirname, "cpp")
 
+        //Compile the c++ files automatically instead of manually
         exec(`g++ -std=c++17 ${filesToCompile} -o ${exeLoc}`, {cwd: fileLoc}, (error, stdout, stderr) =>{
             if(error) {
                 console.log("failed to compile ", exeName, error.message)
@@ -112,7 +106,7 @@ export function runCpp(alg){
         if (!fs.existsSync(binPath)) {
             throw new Error("Cant find exe at ", binPath)
         }
-        const args = [alg];
+        const args = [alg]; //Run with the selected algo
     return new Promise((resolve, reject) => {
         const cppProc = spawn(binPath, args, {
             cwd: path.join(__dirname, "cpp", "build")
@@ -120,15 +114,9 @@ export function runCpp(alg){
 
 
         cppProc.stdout.on("data", (data) => {
-            // process.stdout.write(data)
             const text = data.toString()
             res += (text)
         })
-
-        // cppProc.stderr.on("data", (data) => {
-        //     console.error("C++ stderr:", data.toString());
-        //     return "Error " + data.toString();
-        // });
 
         cppProc.on("close", (code) => {
             console.log(`C++ process exited with code ${code}`);
@@ -136,9 +124,6 @@ export function runCpp(alg){
         });
 
         cppProc.on('error', reject)
-
-        // const result = [...res]
-
     })
 }
 
@@ -155,20 +140,6 @@ export async function retrieveDataTest(req, res){
             // for(let k = 1; k < 21; k+=get20){
 
                 let requests = []
-
-                // for (let j = k; j < k + get20 && j < 201; j++) {
-                //     requests.push(fetch(process.env.DATA_API +
-                //         // "?pageNumber=" + pageNumber +
-                //         // "&pageSize=20" +
-                //         // "&orderingSpecifier=discard" +
-                //         "?app_token=" + process.env.SECRET_TOKEN +
-                //         "&limit=1"
-                //         // "&$select=date_extract_y(date) as year" +
-                //         // "&$where=date_extract_y(date)=2021" +
-                //         // "&$group=year"
-                //     ))
-                    // pageNumber++;
-                // }
 
         requests = await fetch(process.env.DATA_API, {
             method: "POST",
@@ -193,25 +164,9 @@ export async function retrieveDataTest(req, res){
                 const jsonArr = await (response.json())
         console.log(jsonArr)
 
-
-
-
-                // const filter = jsonArr.flatMap(item =>
-                //     Array.isArray(item) ?
-                //         item.map(d => ({
-                //             [req.query.xAxis]: d[req.query.xAxis],
-                //             dr_no: d.dr_no
-                //         }))
-                //         : [])
-
-
-
                 chunk.push(jsonArr)
-
-            // }
             fs.writeFileSync(`crimeData_0.json`, JSON.stringify(chunk))
             console.log("input crimeData: ", 0)
-        // }
 
         console.log("saved dataset.json");
         res.status(200).json({msg: JSON.stringify(chunk)})
@@ -220,11 +175,12 @@ export async function retrieveDataTest(req, res){
         res.status(400).json({msg: "failed to retrieve data"})
     }
 }
+//Get the X axis values
 export function retrieveXAxisData(xAxisReq){
     try{
         const xAxis =  xAxisReq;
         const allData = [];
-        //read
+        //Read all 10 jsons
         for (let i = 0; i < 10; i++) {
             try {
                 const chunk = JSON.parse(fs.readFileSync(`crimeData_${i}.json`));
@@ -233,7 +189,7 @@ export function retrieveXAxisData(xAxisReq){
                 console.error(`Error reading file crimeData_${i}.json:`, err);
             }
         }
-        //Grouped by x axis
+        //Grouped by x axis, count how many times each x axis occurs
         const grouped = {};
         allData.forEach(item => {
             const key = item[xAxis] || "UNKNOWN";
@@ -244,9 +200,10 @@ export function retrieveXAxisData(xAxisReq){
             }
         });
 
+        //A few variables we need (maxes)
         const maxYVal = Math.max(...Object.values(grouped))
         const yVals = Object.values(grouped);
-        const lisXVals = [[...Object.keys(grouped)], maxYVal]
+        const lisXVals = [[...Object.keys(grouped)], maxYVal] //Highest y axis so we can auto set it
 
         console.log("grouped data ready");
         return lisXVals

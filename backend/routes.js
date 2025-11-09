@@ -2,12 +2,9 @@ import express from 'express'
 import { retrieveData, retrieveDataTest } from './controls.js'
 
 const router = express.Router()
-//express router so we can organize our controls here. In the future there will probably be a get request for when bfs and dfs are clicked
-//maybe a post request for when display is clicked idk
 
-
-router.get('/api/test', retrieveData)
-router.get('/test', retrieveDataTest)
+router.get('/api/test', retrieveData) //Define endpoint at /api/test
+router.get('/test', retrieveDataTest) //Define endpoint at /test
 
 
 export default router
